@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ContactForm } from "./components/ContactForm/ContactForm";
 import { Filter } from "./components/Filter/Filter";
 import { ContactList } from "./components/ContactList/ContactList";
@@ -36,10 +36,10 @@ export default function App() {
     setFilter(e.target.value);
   };
 
-  const filteredItems = () => {
+  const filteredItems = useMemo(() => {
     const tempContacts = filter.toLowerCase();
     return contacts.filter((e) => e.name.toLowerCase().includes(tempContacts));
-  };
+  }, [filter, contacts]);
 
   const deleteItem = (itemId) => {
     setContacts((prev) => prev.filter((item) => item.id !== itemId));
@@ -53,7 +53,7 @@ export default function App() {
       <div>
         <Filter value={filter} onFilterChange={filterChange} />
         <ContactList
-          filteredContacts={filteredItems()}
+          filteredContacts={filteredItems}
           onListChange={deleteItem}
         />
       </div>
